@@ -1,3 +1,4 @@
+from django.utils.encoding import force_str
 from rest_framework import serializers
 from .models import UserData
 import requests
@@ -10,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "email", "name", "password"]
 
     def create(self, validated_data):
+        print(validated_data)
         user = UserData.objects.create(email=validated_data['email'],
                                        name=validated_data['name']
                                          )
@@ -17,16 +19,17 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         # Send email
-        self.send_email(user)
+        self.send_email(validated_data['email'], validated_data['name'])
         
         return user
 
-    def send_email(self, user):
+    def send_email(self, email, name):
         # Set up the data for the POST request
         email_data = {
-            "email": user.email,
+            "from_email": "todo-app-admin@todoapp.com",
+            "to_email": email,
             "subject": "Welcome to our service!",
-            "message": "Hi {}, thank you for registering.".format(user.name)
+            "message": "Hi {}, thank you for registering.".format(name)
         }
         # URL of the external service to send email
         url = 'http://127.0.0.1:8001/send-email/'
