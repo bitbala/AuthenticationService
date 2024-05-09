@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import UserData
 import requests
 import os
+import threading
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -10,7 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "email", "name", "password"]
 
     def create(self, validated_data):
-        print(validated_data)
         user = UserData.objects.create(email=validated_data['email'],
                                        name=validated_data['name']
                                          )
@@ -18,7 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         # Send email
-        self.send_email(validated_data['email'], validated_data['name'])
+        thread = threading.Thread(target=self.send_email, args=(validated_data['email'], validated_data['name']))
+        thread.daemon = True
+        thread.start()
         
         return user
 
@@ -34,7 +36,6 @@ class UserSerializer(serializers.ModelSerializer):
         # url = 'http://127.0.0.1:8001/send-email/'
         domain = os.environ.get('EMAIL_DOMAIN')
         url = f'http://{domain}/send-email/'
-        print(url)
         try:
             response = requests.post(url, json=email_data)
             response.raise_for_status()
