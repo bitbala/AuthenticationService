@@ -11,6 +11,7 @@ from rest_framework import status
 from django.core.mail import send_mail
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.permissions import IsAuthenticated
+import os
 
 # view for registering users
 class RegisterView(APIView):
@@ -61,7 +62,9 @@ class ForgotPasswordView(APIView):
             "message": message
         }
         # URL of the external service to send email
-        url = 'http://127.0.0.1:8001/send-email/'
+        #url = 'http://127.0.0.1:8001/send-email/'
+        domain = os.environ.get('EMAIL_DOMAIN')
+        url = f'{domain}/send-email/'
         try:
             response = requests.post(url, json=email_data)
             response.raise_for_status()

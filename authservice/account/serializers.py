@@ -2,8 +2,7 @@ from django.utils.encoding import force_str
 from rest_framework import serializers
 from .models import UserData
 import requests
-
-
+import os
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -32,7 +31,10 @@ class UserSerializer(serializers.ModelSerializer):
             "message": "Hi {}, thank you for registering.".format(name)
         }
         # URL of the external service to send email
-        url = 'http://127.0.0.1:8001/send-email/'
+        # url = 'http://127.0.0.1:8001/send-email/'
+        domain = os.environ.get('EMAIL_DOMAIN')
+        url = f'http://{domain}/send-email/'
+        print(url)
         try:
             response = requests.post(url, json=email_data)
             response.raise_for_status()
