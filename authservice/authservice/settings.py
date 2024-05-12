@@ -36,8 +36,6 @@ if not 'DOCKER_CONTAINER' in os.environ:
     os.environ['EMAIL_DOMAIN'] = '127.0.0.1:8001'
     os.environ['AUTH_DOMAIN'] = '127.0.0.1:8000'
 
-print (os.environ)
-
 # Application definition
 
 INSTALLED_APPS = [
