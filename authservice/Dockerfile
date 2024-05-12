@@ -4,6 +4,7 @@ FROM python:3.9-alpine
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV DOCKER_CONTAINER 1
 
 # Set the working directory in the container
 WORKDIR /app

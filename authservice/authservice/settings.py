@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,6 +30,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['authenticationservice', '127.0.0.1']
 
+
+if not 'DOCKER_CONTAINER' in os.environ:
+    print ('Entered DOCKER CONTAINER')
+    os.environ['EMAIL_DOMAIN'] = '127.0.0.1:8001'
+    os.environ['AUTH_DOMAIN'] = '127.0.0.1:8000'
+
+print (os.environ)
 
 # Application definition
 
