@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ['authenticationservice', '127.0.0.1']
 
 
 if not 'DOCKER_CONTAINER' in os.environ:
-    print ('Entered DOCKER CONTAINER')
     os.environ['EMAIL_DOMAIN'] = '127.0.0.1:8001'
     os.environ['AUTH_DOMAIN'] = '127.0.0.1:8000'
 
